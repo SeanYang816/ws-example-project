@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import {useEffect, useMemo} from 'react'
+import { log } from './utils'
 
 function App() {
+  const ws = useMemo(() => new WebSocket('ws://localhost:1234')
+  , [])
+  useEffect(() => {
+    ws.addEventListener('open', () => {
+      log('I am connected!')
+
+      ws.send('I sent a message')
+    })
+
+    ws.addEventListener('message', e => {
+      log(e)
+    })
+  }, [ws])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      Hi
     </div>
   );
 }
