@@ -1,4 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAction } from '@reduxjs/toolkit'
+
+export const connectWebSocket = createAction('webSocket/requestWebSocketConnection')
 
 const initialState = {
   value: 0,

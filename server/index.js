@@ -1,14 +1,13 @@
 const  { jsonParser, jsonStringify, log } = require('./utils')
+const { SERVER_ACTIONS, CLIENT_ACTIONS } = require('./constants')
+const uuid = require('uuid')
 
 const WebSocket = require('ws')
-const uuid = require('uuid')
-const {SERVER_ACTIONS, CLIENT_ACTIONS} = require('./constants')
 const wss = new WebSocket.Server({ port: 1234 })
 const CLIENT_LIST = []
 const CLIENT_CHAT_LIST = []
 
 const handleLogin = () => sendAll(jsonStringify({ action: SERVER_ACTIONS.LOGIN }))
-
 
 const handleMessageChatUpdate = (message) => {
   CLIENT_CHAT_LIST.push({ ...message })
