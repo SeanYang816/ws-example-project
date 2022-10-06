@@ -23,11 +23,11 @@ function countdown(secs) {
     return eventChannel(emitter => {
         const iv = setInterval(() => {
           secs -= 1
-          console.log(secs)
+          console.info(secs)
           if (secs > 0) {
             emitter(secs)
           } else {
-            console.log('The World Ends.')
+            console.info('The World Ends.')
             // this causes the channel to close
             emitter(END)
           }

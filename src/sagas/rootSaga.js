@@ -13,10 +13,7 @@ export const getWs = () => ws
 
 function createEventChannel (ws) {
     return eventChannel((emitter) => {
-        const handleEventListener = (e) => {
-            // console.log(e)
-            emitter(e)
-        }
+        const handleEventListener = (e) => emitter(e)
         ws?.addEventListener('message', handleEventListener)
         return () => {
             ws?.removeEventListener('message', handleEventListener)

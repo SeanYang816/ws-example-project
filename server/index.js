@@ -1,50 +1,60 @@
 const  { jsonParser, jsonStringify, log } = require('./utils')
 const { SERVER_ACTIONS, CLIENT_ACTIONS } = require('./constants')
 const uuid = require('uuid')
+const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator')
+
 
 const WebSocket = require('ws')
 const wss = new WebSocket.Server({ port: 1234 })
-const CLIENT_LIST = []
+const clientList = []
 const CLIENT_CHAT_LIST = []
 
-const handleLogin = () => sendAll(jsonStringify({ action: SERVER_ACTIONS.LOGIN }))
-
-const handleMessageChatUpdate = (message) => {
-  CLIENT_CHAT_LIST.push({ ...message })
+const handleChatUpdate = (message) => {
+  const { actionName: action, actionData: data, messageId: reply_to_messageId, clientId, visitorName } = message
+  const command = {
+    action, data, reply_to_messageId, clientId, visitorName
+  }
+  CLIENT_CHAT_LIST.push(command)
   sendAll(jsonStringify({ action: SERVER_ACTIONS.SEND_MESSAGE, data: CLIENT_CHAT_LIST}))
 }
 
+const config = {
+  dictionaries: [adjectives, colors, animals]
+}
+
 const eventMaps = {
-  [CLIENT_ACTIONS.LOGIN]: handleLogin,
-  [CLIENT_ACTIONS.SEND_MESSAGE]: handleMessageChatUpdate,
+  [CLIENT_ACTIONS.LOGIN]: () => sendAll(jsonStringify({ action: SERVER_ACTIONS.LOGIN })),
+  [CLIENT_ACTIONS.SEND_MESSAGE]: handleChatUpdate,
 }
 
 wss.on("connection", ws => {
   const clientId = uuid.v4()
-  CLIENT_LIST.push({ clientId, ws })
-  log(`Client ${clientId} has connected!`)
+  const visitorName = uniqueNamesGenerator(config)
+
+  clientList.push({ visitorName, clientId, ws })
+  log(`${visitorName} has connected!`)
   sendAll(jsonStringify({ action: SERVER_ACTIONS.SEND_MESSAGE, data: CLIENT_CHAT_LIST}))
 
   ws.on('message', (msg, isBinary) => {
     const data = isBinary ? msg : msg.toString();
-    const message = jsonParser(data)
+    const { action: actionName, data: actionData, messageId } = jsonParser(data)
 
     // key function
-    eventMaps[message.action] && eventMaps[message.action]?.({ clientId, ...message }, ws)
+    eventMaps[actionName] && eventMaps[actionName]?.({ visitorName ,clientId, messageId, actionName, actionData }, ws)
     })
 
   ws.on('close', () => {
-    const index = CLIENT_LIST.findIndex(client => client.clientId)
-    const CLIENT_LEAVE = CLIENT_LIST[index].clientId
-    CLIENT_LIST.splice(index, 1)
-    log(`Client ${CLIENT_LEAVE} has disconntected!`)
-    sendAll(`Client ${CLIENT_LEAVE} has disconntected!`)
+    const index = clientList.findIndex(client => client.clientId)
+    const CLIENT_LEAVE = clientList[index].clientId
+    clientList.splice(index, 1)
+    log(`${visitorName} has disconntected!`)
+    sendAll(`${CLIENT_LEAVE} has disconntected!`)
   })
 })
 
 function sendAll (message) {
-  for (let i = 0; i < CLIENT_LIST.length; i++) {
-      CLIENT_LIST[i].ws.send(message);
+  for (let i = 0; i < clientList.length; i++) {
+      clientList[i].ws.send(message);
   }
 }
 

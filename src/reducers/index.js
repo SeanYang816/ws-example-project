@@ -11,7 +11,7 @@ export const rootSlice = createSlice({
   initialState,
   reducers: {
     initialize: (state, { payload }) => {
-        // console.log('Redux store detected')
+        console.info('Redux store detected')
         state.value = payload
     }
   },
