@@ -1,6 +1,6 @@
-import { initialize } from "reducers";
-import {END, eventChannel} from "redux-saga";
-import { actionChannel, call, fork, take, takeEvery } from "redux-saga/effects";
+import { initialize } from "reducers"
+import { END, eventChannel } from "redux-saga"
+import { actionChannel, call, fork, take, takeEvery } from "redux-saga/effects"
 
 function* testFunc({ type, payload }) {
     yield console.info('Redux Saga is working')
@@ -10,7 +10,7 @@ function* watchRequests() {
     // actionChannel can buffer incoming messages if the Saga is not yet ready to take them (e.g. blocked on an API call) 
     const requestChan = yield actionChannel(initialize)
     while (true) {
-      const {payload} = yield take(requestChan)
+      const { payload } = yield take(requestChan)
       yield call(handleRequest, payload)
     }
   }
@@ -31,7 +31,7 @@ function countdown(secs) {
             // this causes the channel to close
             emitter(END)
           }
-        }, 1000);
+        }, 1000)
         // The subscriber must return an unsubscribe function
         return () => {
           clearInterval(iv)

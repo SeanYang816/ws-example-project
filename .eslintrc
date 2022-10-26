@@ -1,0 +1,25 @@
+{
+    "parser": "@babel/eslint-parser",
+    
+    "env": {
+        "es6": true
+    },
+    "parserOptions": {
+        "requireConfigFile": false,
+        "sourceType": "module",
+        "ecmaVersion": 8,
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true,
+            "impliedStrict": true,
+            "classes": true,
+        },
+        "babelOptions": {
+            "presets": ["@babel/preset-react"],
+         },
+  },
+    "rules": {
+        "semi": [2, "never"],
+        "allowTrailingCommas": [0, "never"],
+        "object-curly-spacing": [2, "always"],
+    },
+}

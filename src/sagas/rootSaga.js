@@ -1,11 +1,11 @@
-import {CLIENT_ACTIONS} from "constants"
-import {isCompositeComponent} from "react-dom/test-utils"
+import { CLIENT_ACTIONS } from "constants"
+import { isCompositeComponent } from "react-dom/test-utils"
 import { initialize, connectWebSocket } from "reducers"
-import {eventChannel} from "redux-saga"
+import { eventChannel } from "redux-saga"
 import { call, fork, take, takeEvery } from "redux-saga/effects"
 import test from 'sagas/testSaga'
-import {jsonParser, log, messageCreator} from "utils"
-import { v4 as uuid } from 'uuid';
+import { jsonParser, log, messageCreator } from "utils"
+import { v4 as uuid } from 'uuid'
 
 let ws
 

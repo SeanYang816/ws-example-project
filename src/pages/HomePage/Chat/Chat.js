@@ -1,10 +1,10 @@
-import {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { jsonParser, messageCreator } from 'utils'
 import { useDispatch } from 'react-redux'
-import {connectWebSocket} from 'reducers'
-import { v4 as uuid } from 'uuid';
-import {CLIENT_ACTIONS, SERVER_ACTIONS} from 'constants'
-import {getWs} from 'sagas/rootSaga'
+import { connectWebSocket } from 'reducers'
+import { v4 as uuid } from 'uuid'
+import { CLIENT_ACTIONS, SERVER_ACTIONS } from 'constants'
+import  { getWs } from 'sagas/rootSaga'
 
 function Chat() {
     const ws = getWs()
@@ -48,7 +48,7 @@ function Chat() {
         {chatList.map(chat => <div key={chat.reply_to_messageId}>{`${chat.visitorName}: ${chat.data}`}</div>)}
       </div>
       </>
-    );
+    )
   }
   
-  export default Chat;
+  export default Chat
